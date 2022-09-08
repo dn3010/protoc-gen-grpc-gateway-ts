@@ -395,6 +395,8 @@ function flattenRequestPayload<T extends RequestPayload>(
         objectToMerge = flattenRequestPayload(value as RequestPayload, newPath);
       } else if (isNonZeroValuePrimitive || isNonEmptyPrimitiveArray) {
         objectToMerge = { [newPath]: value };
+      } else if (value && value.constructor === Uint8Array) {
+        objectToMerge = { [newPath]: b64Encode(value, 0, value.length) };
       }
 
       return { ...acc, ...objectToMerge };
